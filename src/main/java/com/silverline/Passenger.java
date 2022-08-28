@@ -3,12 +3,13 @@ package com.silverline;
 import java.sql.SQLException;
 
 public class Passenger {
-    private String firstName;
-    private String secondName;
-    private String fullName;
+    private String constant = "empty";
+    private String firstName = constant;
+    private String secondName = constant;
+    private String fullName = "empty";
     //TODO full name.
     private double costPerCustomer;
-    private String constant = "empty";
+
     private int primaryKey = 1;
 
     public Passenger() {
@@ -41,8 +42,11 @@ public class Passenger {
     }
 
     public String getFullName() {
+        if("empty".equals(firstName)){
+            return "empty";
+        }
 
-        return fullName;
+        return firstName+ " " + secondName;
     }
 
     public double getCostPerCustomer() {
