@@ -12,8 +12,6 @@ public class Main
 {
     public static void main( String[] args ) throws Exception
     {
-        System.out.println(Utils.loadCost(1)[0]);
-        System.out.println(Utils.loadCost(1)[1]);
         Cabin[] cabinRooms = new Cabin[Constants.CABINS_COUNT];//Cabin array objects
         crateFile();
         initialise(cabinRooms);
