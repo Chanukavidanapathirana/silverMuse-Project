@@ -12,40 +12,8 @@ public class Main
 {
     public static void main( String[] args ) throws Exception
     {
-        //todo delete these comment.
-        /***String url = "jdbc:mysql://localhost:3306/cruiseshiplog";
-        String uname = "root";
-        String pass = "45Abc#12";
-        int pk = 25;
-        String fname = "Dhanushka";
-        String surname = "Gunathilaka";
-        double coost = 50000;
-        int fk = 1;
-        String que1 = "INSERT INTO passenger VALUES(?,?,?,?,?)";
-
-
-        Connection con = DriverManager.getConnection(url,uname,pass);
-        PreparedStatement st = con.prepareStatement(que1);// preparedStatement
-        st.setInt(1,pk);
-        st.setString(2,fname);
-        st.setString(3,surname);
-        st.setDouble(4,coost);
-        st.setInt(5,fk);
-        //
-        int count = st.executeUpdate();
-        System.out.println(count+ "row/s affected");
-        ResultSet rs = st.executeQuery(query);
-        while(rs.next()) {
-            String name = rs.getString(2) + ": " + rs.getDouble("Cost");
-            double i = rs.getDouble("Cost");
-            System.out.println(name + " " + i);
-        }
-
-
-        st.close();
-        con.close();***/
-
-        System.out.println(Utils.passengerCountInCabin(12));
+        System.out.println(Utils.loadCost(1)[0]);
+        System.out.println(Utils.loadCost(1)[1]);
         Cabin[] cabinRooms = new Cabin[Constants.CABINS_COUNT];//Cabin array objects
         crateFile();
         initialise(cabinRooms);
@@ -186,7 +154,7 @@ public class Main
                     storeCabinDetails(cabinRooms);
                     break;
                 case "L":
-                    loadCabinDetails();
+                    loadCabinDetails(cabinRooms);
                     break;
                 case "O":
                     sortNames(cabinRooms);
@@ -258,7 +226,7 @@ public class Main
     /***
      * Loading cabin data from file.
      */
-    public static void loadCabinDetails() {
+    public static void loadCabinDetails(Cabin cabinRooms[]) throws SQLException {
 
         try {
             File myObj = new File("CabinDetails.txt");
@@ -271,6 +239,16 @@ public class Main
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+        }
+        for(int i = 1; i < Constants.CABINS_COUNT + 1 ; i++){
+            if(Utils.passengerCountInCabin(i) > 0){
+                for(int j = 0; j < Utils.passengerCountInCabin(i); j++ ){
+                cabinRooms[i - 1].getPassengers()[j].setFirstName(Utils.loadName(i)[j][0]);
+                cabinRooms[i - 1].getPassengers()[j].setSecondName(Utils.loadName(i)[j][1]);
+                cabinRooms[i - 1].getPassengers()[j].setCostPerCustomer(Utils.loadCost(i)[j]);
+                }
+            }
+
         }
     }
 

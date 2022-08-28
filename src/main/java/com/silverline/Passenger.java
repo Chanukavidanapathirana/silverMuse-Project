@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class Passenger {
     private String firstName;
     private String secondName;
-    private String fullName ;
+    private String fullName;
     //TODO full name.
     private double costPerCustomer;
     private String constant = "empty";

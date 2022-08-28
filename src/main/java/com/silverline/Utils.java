@@ -132,5 +132,32 @@ public class Utils {
         return  rs.getInt("COUNT(*)");
 
     }
+    public static String[][] loadName(int i) throws SQLException {
+        String[][] array = new String[passengerCountInCabin(i)][2];
+        Connection con = connectionForDB();
+        String query = "SELECT First_Name,Last_Name FROM passenger WHERE C_ID = "+ i ;
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(query);
+            for (int j = 0; j < passengerCountInCabin(i); j++) {
+                rs.next();
+                array[j][0] = rs.getString("First_Name");
+                array[j][1] = rs.getString("Last_name");
+            }
+
+        return array;
+    }
+
+    public static double[] loadCost(int i) throws SQLException {
+        double[] darray = new double[passengerCountInCabin(i)];
+        Connection con = connectionForDB();
+        String query = "SELECT Cost FROM passenger WHERE C_ID = "+ i ;
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(query);
+            for(int k = 0; k < passengerCountInCabin(i); k++){
+                rs.next();
+                darray[k] = rs.getDouble("Cost");
+            }
+        return darray;
+    }
 
 }
