@@ -1,12 +1,9 @@
 package com.silverline;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.silverline.constant.Constants;
 
 public class Cabin {
-    //todo change this
+
     private Passenger [] passengers = new Passenger[Constants.PASSENGERS_IN_A_CABIN];
 
     public Passenger[] getPassengers() {
@@ -48,9 +45,5 @@ public class Cabin {
         for (int j = 0; j < Constants.PASSENGERS_IN_A_CABIN; j++) {
             getPassengers()[j] = new Passenger();
         }
-
     }
-
-
-
 }

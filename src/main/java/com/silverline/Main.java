@@ -1,17 +1,21 @@
 package com.silverline;
+import com.silverline.constant.Constants;
+import com.silverline.dao.PassengerDaoImpl;
+import com.silverline.util.DbUtil;
+import com.silverline.util.Utils;
+
 import java.sql.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Main
-{
-    public static void main( String[] args ) throws Exception
-    {
+public class Main {
+
+    public static void main( String[] args ) throws Exception {
+
         Cabin[] cabinRooms = new Cabin[Constants.CABINS_COUNT];//Cabin array objects
         crateFile();
         initialise(cabinRooms);
@@ -57,7 +61,8 @@ public class Main
         int arrayLength = 0;
         for (int i = 0; i < cabinRooms.length; i++) {
             for (int j = 0; j < Constants.PASSENGERS_IN_A_CABIN; j++) {
-                if (!("empty".equals(cabinRooms[i].getPassengers()[j].getFullName()) || "e".equals(cabinRooms[i].getPassengers()[j].getSecondName()))) {
+                if (!("empty".equals(cabinRooms[i].getPassengers()[j].getFullName()) ||
+                        "e".equals(cabinRooms[i].getPassengers()[j].getSecondName()))) {
                     arrayLength++;
                 }
             }
@@ -67,7 +72,8 @@ public class Main
         int count = 0;//using count to create sort array
         for (int i = 0; i < cabinRooms.length; i++) {
             for (int j = 0; j < Constants.PASSENGERS_IN_A_CABIN; j++) {
-                if (!("empty".equals(cabinRooms[i].getPassengers()[j].getFullName()) || "empty".equals(cabinRooms[i].getPassengers()[j].getSecondName()))) {
+                if (!("empty".equals(cabinRooms[i].getPassengers()[j].getFullName()) ||
+                        "empty".equals(cabinRooms[i].getPassengers()[j].getSecondName()))) {
                     sort[count] = cabinRooms[i].getPassengers()[j].getFullName();
                     count++;
                 }
@@ -111,7 +117,6 @@ public class Main
             String input = Utils.getUserInput("Enter  your input :- ");
             switch (input) {
                 case "A":
-
                     addPassengers(cabinRooms );
                     break;
                 case "V":
@@ -127,19 +132,18 @@ public class Main
                     }
                     break;
                 case "E":
-                    for (int i = 0; i < Constants.CABINS_COUNT;i++) {
+                    for (int i = 0; i < Constants.CABINS_COUNT; i++) {
                         if(cabinRooms[i].isCabinEmpty()){
-                            System.out.println(String.format("Cabin no %s is empty",(i+1)));
+                            System.out.println(String.format("Cabin no %s is empty",(i + 1)));
                         }
                     }
                     break;
                 case "D":
-                    /***if (Utils.isCabinsFull(cabinRooms)) {
-                     cabinRooms[i - 1].deletePassengers();
-                     }***/
                     int i = Utils.getUserIntInput("Enter the cabin number to delete the passengers :- ");
-                        cabinRooms[i - 1].deletePassengers();
-                    Utils.deletePassengersFromDB(i);
+                    cabinRooms[i - 1].deletePassengers();
+                    //Utils.deletePassengersFromDB(i);
+                    PassengerDaoImpl passengerDao = new PassengerDaoImpl();
+                    passengerDao.delete(i);
 
                     break;
                 case "F":
@@ -184,11 +188,14 @@ public class Main
         for (int i = 0; i < Constants.CABINS_COUNT; i++) {
             for (int j = 0; j < Constants.PASSENGERS_IN_A_CABIN; j++) {
                 if (cabinRooms[i].getPassengers()[j].getFirstName().equals(name)) {
-                    System.out.println(String.format("%s (room no %s ) cost is %s", cabinRooms[i].getPassengers()[j].getFirstName(), (i + 1), cabinRooms[i].getPassengers()[j].getCostPerCustomer()));
+                    System.out.println(String.format("%s (room no %s ) cost is %s",
+                            cabinRooms[i].getPassengers()[j].getFirstName(), (i + 1),
+                            cabinRooms[i].getPassengers()[j].getCostPerCustomer()));
                 }
             }
         }
-        System.out.println("* if you didn't get the cost according to the customer first name, please reenter the correct first name * ");
+        System.out.println("* if you didn't get the cost according to the customer first name," +
+                " please reenter the correct first name * ");
 
         double fullTotal = 0;
         for (Cabin cabinRoom : cabinRooms  ) {
@@ -210,7 +217,8 @@ public class Main
             for (int i = 0; i < Constants.CABINS_COUNT; i++) {
                 myWriter.write( "Cabin number "+ (i + 1) +System.lineSeparator());
                 for (int j = 0; j < Constants.PASSENGERS_IN_A_CABIN; j++) {
-                    myWriter.write(" passenger "+(j + 1)+" :- { " + cabinRooms[i].getPassengers()[j].getFullName() + " - " +cabinRooms[i].getPassengers()[j].getCostPerCustomer()+" }."+ System.lineSeparator());
+                    myWriter.write(" passenger "+(j + 1)+" :- { " + cabinRooms[i].getPassengers()[j].getFullName() +
+                            " - " +cabinRooms[i].getPassengers()[j].getCostPerCustomer()+" }."+ System.lineSeparator());
                 }
             }
             myWriter.close();
@@ -239,11 +247,11 @@ public class Main
             e.printStackTrace();
         }
         for(int i = 1; i < Constants.CABINS_COUNT + 1 ; i++){
-            if(Utils.passengerCountInCabin(i) > 0){
-                for(int j = 0; j < Utils.passengerCountInCabin(i); j++ ){
-                cabinRooms[i - 1].getPassengers()[j].setFirstName(Utils.loadName(i)[j][0]);
-                cabinRooms[i - 1].getPassengers()[j].setSecondName(Utils.loadName(i)[j][1]);
-                cabinRooms[i - 1].getPassengers()[j].setCostPerCustomer(Utils.loadCost(i)[j]);
+            if(DbUtil.getPassengerCount(i) > 0){
+                for(int j = 0; j < DbUtil.getPassengerCount(i); j++ ){
+                cabinRooms[i - 1].getPassengers()[j].setFirstName(DbUtil.getName(i)[j][0]);
+                cabinRooms[i - 1].getPassengers()[j].setSecondName(DbUtil.getName(i)[j][1]);
+                cabinRooms[i - 1].getPassengers()[j].setCostPerCustomer(DbUtil.getCost(i)[j]);
                 }
             }
 
@@ -261,16 +269,20 @@ public class Main
                 System.out.println("Sorry!!! All cabins are full.");
                 break;
             } else {
-                int roomNum = Utils.askingCabinNo();
+                int roomNum = Utils.getCabinNo();
                 if (roomNum == Constants.CABINS_COUNT + 1) {
                     break;
                 } else if (roomNum >= 1 && roomNum < Constants.CABINS_COUNT + 1) {
-                    System.out.println(String.format("****** Enter passengers names for room %s ****** ",roomNum));
+                    System.out.println(String.format("****** Enter passengers names for room %s ****** ", roomNum));
                     //set customer1
-                    cabinRooms[roomNum - 1].getPassengers()[0] = new Passenger(Utils.enterFirstName(0), Utils.enterSurName(0), Utils.enterCostForCabin(0), roomNum );
+                    cabinRooms[roomNum - 1].getPassengers()[0] = new Passenger(Utils.enterFirstName(0),
+                            Utils.enterSurName(0), Utils.enterCostForCabin(0), roomNum );
+                    DbUtil.setPassenger(cabinRooms, roomNum, 0);
                     for(int i = 1; i < Constants.PASSENGERS_IN_A_CABIN; i++) {
                         if ("Y".equals(Utils.askingForAdd(i + 1))) {
-                            cabinRooms[roomNum - 1].getPassengers()[i] = new Passenger(Utils.enterFirstName(i), Utils.enterSurName(i), Utils.enterCostForCabin(i), roomNum);
+                            cabinRooms[roomNum - 1].getPassengers()[i] = new Passenger(Utils.enterFirstName(i),
+                                    Utils.enterSurName(i), Utils.enterCostForCabin(i), roomNum);
+                            DbUtil.setPassenger(cabinRooms, roomNum, i);
                         }
                     }
                 } else {

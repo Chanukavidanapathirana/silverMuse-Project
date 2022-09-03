@@ -7,7 +7,6 @@ public class Passenger {
     private String firstName = constant;
     private String secondName = constant;
     private String fullName = "empty";
-    //TODO full name.
     private double costPerCustomer;
 
     private int primaryKey = 1;
@@ -26,8 +25,6 @@ public class Passenger {
         this.secondName = secondName;
         this.fullName = firstName + " " + secondName;
         this.costPerCustomer = costPerCustomer;
-
-        Utils.storeInDatabase( firstName, secondName, costPerCustomer, cabinNo);
         this.primaryKey++;
     }
 
