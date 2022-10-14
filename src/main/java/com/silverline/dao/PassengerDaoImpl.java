@@ -37,23 +37,25 @@ public class PassengerDaoImpl implements PassengerDao {
         System.out.println(count + "row/s affected");
         st.close();
         con.close();
+
     }
 
     @Override
     public int passengerCount(int i) throws SQLException {
-
         Connection con = DbUtil.connection();
         String query = DbConstant.COUNT_PASSENGERS_SQL+ i ;
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(query);
         rs.next();
-        return  rs.getInt("COUNT(*)");
+        int count = rs.getInt("COUNT(*)");
+        st.close();
+        con.close();
+        return count ;
+
     }
 
     @Override
     public String[][] loadName(int i) throws SQLException {
-
-
         String[][] array = new String[passengerCount(i)][2];
         Connection con = DbUtil.connection();
         String query = DbConstant.GET_NAME_SQL+ i ;
@@ -64,20 +66,26 @@ public class PassengerDaoImpl implements PassengerDao {
             array[j][0] = rs.getString("First_Name");
             array[j][1] = rs.getString("Last_name");
         }
+        st.close();
+        con.close();
         return array;
+
     }
 
     @Override
     public double[] loadCost(int i) throws SQLException {
-        double[] darray = new double[passengerCount(i)];
+        double[] countArray = new double[passengerCount(i)];
         Connection con = DbUtil.connection();
         String query = DbConstant.GET_COST_SQL+ i ;
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(query);
         for(int k = 0; k < passengerCount(i); k++){
             rs.next();
-            darray[k] = rs.getDouble("Cost");
+            countArray[k] = rs.getDouble("Cost");
         }
-        return darray;
+        st.close();
+        con.close();
+        return countArray;
+
     }
 }

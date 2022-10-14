@@ -23,7 +23,7 @@ public class Cabin {
     public boolean isCabinEmpty() {
 
         for(int i  = 0; i < Constants.PASSENGERS_IN_A_CABIN; i++) {
-            if (!"empty".equals(getPassengers()[0].getFirstName())) {
+            if(!"empty".equals(getPassengers()[0].getFirstName())) {
                 return false;
             }
         }

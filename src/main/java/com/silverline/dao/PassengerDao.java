@@ -5,10 +5,10 @@ import java.sql.SQLException;
 
 public interface PassengerDao {
 
-    public void store(Passenger passenger, int fk) throws SQLException;
-    public void delete(int i) throws SQLException;
-    public int passengerCount(int i) throws SQLException;
-    public String[][] loadName(int i) throws SQLException;
-    public double[] loadCost(int i) throws SQLException;
+    void store(Passenger passenger, int fk) throws SQLException;
+    void delete(int i) throws SQLException;
+    int passengerCount(int i) throws SQLException;
+    String[][] loadName(int i) throws SQLException;
+    double[] loadCost(int i) throws SQLException;
 
 }

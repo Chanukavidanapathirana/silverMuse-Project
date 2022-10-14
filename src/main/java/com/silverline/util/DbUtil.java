@@ -19,11 +19,11 @@ public class DbUtil {
     public static void setPassenger(Cabin[] cabinRooms, int roomNum, int i) throws SQLException {
 
         com.silverline.model.Passenger passenger = new com.silverline.model.Passenger();
-        passenger.setFirstName(cabinRooms[roomNum - 1].getPassengers()[0].getFirstName());
-        passenger.setLastName(cabinRooms[roomNum - 1].getPassengers()[0].getSecondName());
-        passenger.setCost(cabinRooms[roomNum - 1].getPassengers()[0].getCostPerCustomer());
-        PassengerDaoImpl passengerDao = new PassengerDaoImpl();
-        passengerDao.store(passenger, roomNum);
+        passenger.setFirstName(cabinRooms[roomNum - 1].getPassengers()[i].getFirstName());
+        passenger.setLastName(cabinRooms[roomNum - 1].getPassengers()[i].getSecondName());
+        passenger.setCost(cabinRooms[roomNum - 1].getPassengers()[i].getCostPerCustomer());
+        PassengerDaoImpl passengerDaoLayer = new PassengerDaoImpl();
+        passengerDaoLayer.store(passenger, roomNum);
     }
 
     public static int getPassengerCount(int i) throws SQLException {

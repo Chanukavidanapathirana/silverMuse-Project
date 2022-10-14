@@ -39,10 +39,10 @@ public class Passenger {
     }
 
     public String getFullName() {
-        if("empty".equals(firstName)){
+
+        if("empty".equals(firstName)) {
             return "empty";
         }
-
         return firstName+ " " + secondName;
     }
 
